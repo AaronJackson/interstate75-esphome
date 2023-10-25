@@ -1,12 +1,5 @@
 #include "hub75display.h"
 
-#include "pico/stdlib.h"
-#include "hardware/gpio.h"
-#include "hardware/pio.h"
-#include "hub75.pio.h"
-#include "pico/multicore.h"
-#include "mountains_128x64_rgb565.h"
-
 namespace esphome {
   namespace hub75display {
     static const char *const TAG = "hub75display.display";
