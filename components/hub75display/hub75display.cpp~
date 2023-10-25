@@ -1,0 +1,48 @@
+#include "esphome.h"
+#include "HUB75.h"
+
+namespace esphome {
+namespace hub75display {
+
+static const char *const TAG = "hub75display";
+
+  void HUB75Display::setup() {
+    pinMode(R0, OUTPUT);
+    pinMode(G0, OUTPUT);
+    pinMode(B0, OUTPUT);
+    pinMode(R1, OUTPUT);
+    pinMode(G1, OUTPUT);
+    pinMode(B1, OUTPUT);
+    pinMode(ROW_A, OUTPUT);
+    pinMode(ROW_B, OUTPUT);
+    pinMode(ROW_C, OUTPUT);
+    pinMode(ROW_D, OUTPUT);
+    pinMode(ROW_E, OUTPUT);
+    pinMode(CLK, OUTPUT);
+    pinMode(STB, OUTPUT);
+    pinMode(OE, OUTPUT);
+
+    digitalWrite(OE, HIGH);
+    digitalWrite(OE, LOW);
+    digitalWrite(STB, HIGH);
+    digitalWrite(STB, LOW);
+  }
+
+  void HOT HUB75Display::display() {
+    for (int col = 0; col < 64; col++) {
+      digitalWrite(ROW_A, HIGH);
+      digitalWrite(R0, red > 0.5);
+      digitalWrite(G0, green > 0.5);
+      digitalWrite(B0, blue > 0.5);
+
+      digitalWrite(CLK, HIGH);
+      digitalWrite(CLK, LOW);
+    }
+    
+    digitalWrite(STB, HIGH);
+    digitalWrite(STB, LOW);
+  }
+
+				     
+}
+}
