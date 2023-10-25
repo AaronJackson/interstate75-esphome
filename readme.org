@@ -1,0 +1,37 @@
+* ESPHome on the Interstate75 RGB Matrix Display
+
+Seems to work! Tad flickery.
+
+#+BEGIN_SRC yaml
+external_components:
+  - source: github://AaronJackson/interstate75-esphome@main
+    components: [ hub75display ]
+    refresh: 0s
+
+font:
+  - file: "gfonts://Roboto"
+    id: roboto12
+    size: 12
+
+display:
+  - platform: hub75display
+    id: mydisplay
+    update_interval: 0ms
+    lambda: |-
+      Color red = Color(255, 0, 0);
+      Color green = Color(0, 255, 0);
+      Color blue = Color(0, 0, 255);
+      Color white = Color(255, 255, 255);
+
+      it.draw_pixel_at(0, 0, red);
+      it.draw_pixel_at(63, 0, green);
+      it.draw_pixel_at(63, 63, blue);
+      it.draw_pixel_at(0, 63, white);
+
+      it.draw_pixel_at(31, 31, white);
+
+      it.circle(31, 31, 16, white);
+      it.rectangle(3, 3, 16, 16, white);
+
+      it.print(4, 50, id(roboto12), "Hello");
+#+END_SRC
