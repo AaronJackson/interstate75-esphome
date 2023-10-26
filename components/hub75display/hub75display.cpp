@@ -28,24 +28,26 @@ namespace esphome {
 
       while (1) {
 	for (int row = 0; row < h; row++) {
+
+	  if (!mutex_try_enter(&lock, &owner))
+	    mutex_enter_blocking(&lock);
 	  for (int col = 0; col < w; col++) {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
-	    if (!mutex_try_enter(&lock, &owner))
-	      mutex_enter_blocking(&lock);
+
 	    digitalWrite(I75_R0, (active_img[i0] & 0x0000FF) > 0);
 	    digitalWrite(I75_G0, (active_img[i0] & 0x00FF00) > 0);
 	    digitalWrite(I75_B0, (active_img[i0] & 0xFF0000) > 0);
 	    digitalWrite(I75_R1, (active_img[i1] & 0x0000FF) > 0);
 	    digitalWrite(I75_G1, (active_img[i1] & 0x00FF00) > 0);
 	    digitalWrite(I75_B1, (active_img[i1] & 0xFF0000) > 0);
-	    mutex_exit(&lock);
 
 	    digitalWrite(I75_CLK, HIGH);
 	    digitalWrite(I75_CLK, LOW);
 	  }
 
+	  mutex_exit(&lock);
 	  digitalWrite(I75_OE, HIGH);
 
 	  digitalWrite(I75_ROW_A, (row & 1) > 0);
