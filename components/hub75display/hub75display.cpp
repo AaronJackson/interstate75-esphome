@@ -14,7 +14,7 @@ namespace esphome {
       this->writer_ = writer;
     }
 
-    mutex_t lock;
+    static mutex_t lock;
 
     uint32_t ximg[64*64];
     void core1_redraw() {
