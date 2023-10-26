@@ -45,8 +45,6 @@ namespace esphome {
       void draw_absolute_pixel_internal(int x, int y, Color color) override;
       int get_height_internal() override;
       int get_width_internal() override;
-
-      void core1_redraw();
     };
 
   }

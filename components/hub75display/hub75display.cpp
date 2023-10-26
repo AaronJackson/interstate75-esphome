@@ -12,36 +12,7 @@ namespace esphome {
       this->writer_ = writer;
     }
 
-    void HUB75Display::setup() {
-      pinMode(I75_R0, OUTPUT);
-      pinMode(I75_G0, OUTPUT);
-      pinMode(I75_B0, OUTPUT);
-      pinMode(I75_R1, OUTPUT);
-      pinMode(I75_G1, OUTPUT);
-      pinMode(I75_B1, OUTPUT);
-      pinMode(I75_ROW_A, OUTPUT);
-      pinMode(I75_ROW_B, OUTPUT);
-      pinMode(I75_ROW_C, OUTPUT);
-      pinMode(I75_ROW_D, OUTPUT);
-      pinMode(I75_ROW_E, OUTPUT);
-      pinMode(I75_CLK, OUTPUT);
-      pinMode(I75_STB, OUTPUT);
-      pinMode(I75_OE, OUTPUT);
-
-      digitalWrite(I75_OE, LOW);
-      digitalWrite(I75_STB, LOW);
-
-      multicore_launch_core1(this->core1_redraw);
-    }
-
-    void HUB75Display::update() {
-      if (this->writer_.has_value()) {
-	(*this->writer_)(*this);
-      }
-      this->display();
-    }
-
-    void HUB75Display::core1_redraw() {
+    void core1_redraw() {
       int h = this->get_height_internal() / 2;
       int w = this->get_width_internal();
 
@@ -77,6 +48,36 @@ namespace esphome {
 	}
       }
     }
+
+    void HUB75Display::setup() {
+      pinMode(I75_R0, OUTPUT);
+      pinMode(I75_G0, OUTPUT);
+      pinMode(I75_B0, OUTPUT);
+      pinMode(I75_R1, OUTPUT);
+      pinMode(I75_G1, OUTPUT);
+      pinMode(I75_B1, OUTPUT);
+      pinMode(I75_ROW_A, OUTPUT);
+      pinMode(I75_ROW_B, OUTPUT);
+      pinMode(I75_ROW_C, OUTPUT);
+      pinMode(I75_ROW_D, OUTPUT);
+      pinMode(I75_ROW_E, OUTPUT);
+      pinMode(I75_CLK, OUTPUT);
+      pinMode(I75_STB, OUTPUT);
+      pinMode(I75_OE, OUTPUT);
+
+      digitalWrite(I75_OE, LOW);
+      digitalWrite(I75_STB, LOW);
+
+      multicore_launch_core1(core1_redraw);
+    }
+
+    void HUB75Display::update() {
+      if (this->writer_.has_value()) {
+	(*this->writer_)(*this);
+      }
+      this->display();
+    }
+
 
     void HUB75Display::display() {
 
