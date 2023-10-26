@@ -1,5 +1,7 @@
 #include "hub75display.h"
 
+#include "cores/rp2040/CoreMutex.h"
+
 namespace esphome {
   namespace hub75display {
     static const char *const TAG = "hub75display.display";
