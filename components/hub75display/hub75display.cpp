@@ -89,7 +89,7 @@ namespace esphome {
     void HUB75Display::update() {
       if (!mutex_try_enter(&lock, &c0owner))
 	mutex_enter_blocking(&lock);
-      void tmp = active_img;
+      void *tmp = active_img;
       active_img = nonactive_img;
       nonactive_img = tmp;
       mutex_exit(&lock);
