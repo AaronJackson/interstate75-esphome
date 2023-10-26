@@ -1,6 +1,6 @@
 #include "hub75display.h"
 
-#include "cores/rp2040/CoreMutex.h"
+#include "pico/mutex.h"
 
 namespace esphome {
   namespace hub75display {
@@ -27,17 +27,14 @@ namespace esphome {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
-	    auto m = new CoreMutex(lock);
-	    while (!m);
-
+	    mutex_enter_blocking(lock);
 	    digitalWrite(I75_R0, (ximg[i0] & 0x0000FF) > 0);
 	    digitalWrite(I75_G0, (ximg[i0] & 0x00FF00) > 0);
 	    digitalWrite(I75_B0, (ximg[i0] & 0xFF0000) > 0);
 	    digitalWrite(I75_R1, (ximg[i1] & 0x0000FF) > 0);
 	    digitalWrite(I75_G1, (ximg[i1] & 0x00FF00) > 0);
 	    digitalWrite(I75_B1, (ximg[i1] & 0xFF0000) > 0);
-
-	    delete m;
+	    mutex_exit(lock);
 
 	    digitalWrite(I75_CLK, HIGH);
 	    digitalWrite(I75_CLK, LOW);
@@ -94,9 +91,9 @@ namespace esphome {
     }
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      auto m = new CoreMutex(lock);
-      while (!m);
+      mutex_enter_blocking(lock);
       ximg[y * 64 + x] = c.raw_32;
+      mutex_exit(lock);
     }
 
     int HUB75Display::get_height_internal() {
