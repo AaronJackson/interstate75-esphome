@@ -18,8 +18,8 @@ namespace esphome {
     uint32_t ximg[64*64];
     uint32_t yimg[64*64];
 
-    void *active_img = ximg;
-    void *nonactive_img = yimg;
+    uint32_t *active_img = ximg;
+    uint32_t *nonactive_img = yimg;
 
     void core1_redraw() {
       uint32_t owner;
@@ -34,12 +34,12 @@ namespace esphome {
 
 	    if (!mutex_try_enter(&lock, &owner))
 	      mutex_enter_blocking(&lock);
-	    digitalWrite(I75_R0, (&active_img[i0] & 0x0000FF) > 0);
-	    digitalWrite(I75_G0, (&active_img[i0] & 0x00FF00) > 0);
-	    digitalWrite(I75_B0, (&active_img[i0] & 0xFF0000) > 0);
-	    digitalWrite(I75_R1, (&active_img[i1] & 0x0000FF) > 0);
-	    digitalWrite(I75_G1, (&active_img[i1] & 0x00FF00) > 0);
-	    digitalWrite(I75_B1, (&active_img[i1] & 0xFF0000) > 0);
+	    digitalWrite(I75_R0, (active_img[i0] & 0x0000FF) > 0);
+	    digitalWrite(I75_G0, (active_img[i0] & 0x00FF00) > 0);
+	    digitalWrite(I75_B0, (active_img[i0] & 0xFF0000) > 0);
+	    digitalWrite(I75_R1, (active_img[i1] & 0x0000FF) > 0);
+	    digitalWrite(I75_G1, (active_img[i1] & 0x00FF00) > 0);
+	    digitalWrite(I75_B1, (active_img[i1] & 0xFF0000) > 0);
 	    mutex_exit(&lock);
 
 	    digitalWrite(I75_CLK, HIGH);
@@ -107,7 +107,7 @@ namespace esphome {
 
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      &nonactive_img[y * 64 + x] = c.raw_32;
+      nonactive_img[y * 64 + x] = c.raw_32;
     }
 
     int HUB75Display::get_height_internal() {
