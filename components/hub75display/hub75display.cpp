@@ -30,6 +30,8 @@ namespace esphome {
 
       digitalWrite(I75_OE, LOW);
       digitalWrite(I75_STB, LOW);
+
+      multicore_launch_core1(this->core1_redraw);
     }
 
     void HUB75Display::update() {
@@ -39,40 +41,44 @@ namespace esphome {
       this->display();
     }
 
-    void HUB75Display::display() {
+    void HUB75Display::core1_redraw() {
       int h = this->get_height_internal() / 2;
       int w = this->get_width_internal();
 
+      while (1) {
+	for (int row = 0; row < h; row++) {
+	  for (int col = 0; col < w; col++) {
+	    int i0 = row * 64 + col;
+	    int i1 = (row + 32) * 64 + col;
 
-      for (int row = 0; row < h; row++) {
-	for (int col = 0; col < w; col++) {
-	  int i0 = row * 64 + col;
-	  int i1 = (row + 32) * 64 + col;
+	    digitalWrite(I75_R0, (this->img[i0] & 0x0000FF) > 0);
+	    digitalWrite(I75_G0, (this->img[i0] & 0x00FF00) > 0);
+	    digitalWrite(I75_B0, (this->img[i0] & 0xFF0000) > 0);
+	    digitalWrite(I75_R1, (this->img[i1] & 0x0000FF) > 0);
+	    digitalWrite(I75_G1, (this->img[i1] & 0x00FF00) > 0);
+	    digitalWrite(I75_B1, (this->img[i1] & 0xFF0000) > 0);
 
-	  digitalWrite(I75_R0, (this->img[i0] & 0x0000FF) > 0);
-	  digitalWrite(I75_G0, (this->img[i0] & 0x00FF00) > 0);
-	  digitalWrite(I75_B0, (this->img[i0] & 0xFF0000) > 0);
-	  digitalWrite(I75_R1, (this->img[i1] & 0x0000FF) > 0);
-	  digitalWrite(I75_G1, (this->img[i1] & 0x00FF00) > 0);
-	  digitalWrite(I75_B1, (this->img[i1] & 0xFF0000) > 0);
+	    digitalWrite(I75_CLK, HIGH);
+	    digitalWrite(I75_CLK, LOW);
+	  }
 
-	  digitalWrite(I75_CLK, HIGH);
-	  digitalWrite(I75_CLK, LOW);
+	  digitalWrite(I75_OE, HIGH);
+
+	  digitalWrite(I75_ROW_A, (row & 1) > 0);
+	  digitalWrite(I75_ROW_B, (row & 2) > 0);
+	  digitalWrite(I75_ROW_C, (row & 4) > 0);
+	  digitalWrite(I75_ROW_D, (row & 8) > 0);
+	  digitalWrite(I75_ROW_E, (row & 16) > 0);
+
+	  digitalWrite(I75_STB, HIGH);
+	  digitalWrite(I75_STB, LOW);
+
+	  digitalWrite(I75_OE, LOW);
 	}
-
-	digitalWrite(I75_OE, HIGH);
-
-	digitalWrite(I75_ROW_A, (row & 1) > 0);
-	digitalWrite(I75_ROW_B, (row & 2) > 0);
-	digitalWrite(I75_ROW_C, (row & 4) > 0);
-	digitalWrite(I75_ROW_D, (row & 8) > 0);
-	digitalWrite(I75_ROW_E, (row & 16) > 0);
-
-	digitalWrite(I75_STB, HIGH);
-	digitalWrite(I75_STB, LOW);
-
-	digitalWrite(I75_OE, LOW);
       }
+    }
+
+    void HUB75Display::display() {
 
     }
 
