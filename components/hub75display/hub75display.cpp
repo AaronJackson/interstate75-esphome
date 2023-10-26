@@ -85,6 +85,7 @@ namespace esphome {
       multicore_launch_core1(core1_redraw);
     }
 
+    uint32_t c0owner;
     void HUB75Display::update() {
       if (!mutex_try_enter(&lock, &c0owner))
 	mutex_enter_blocking(&lock);
@@ -104,7 +105,7 @@ namespace esphome {
 
     }
 
-    uint32_t c0owner;
+
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
       nonactive_img[y * 64 + x] = c.raw_32;
     }
