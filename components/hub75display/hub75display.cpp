@@ -25,7 +25,7 @@ namespace esphome {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
-	    auto m = CoreMutex(lock);
+	    auto m = new CoreMutex(lock);
 	    while (!m);
 
 	    digitalWrite(I75_R0, (ximg[i0] & 0x0000FF) > 0);
@@ -92,7 +92,7 @@ namespace esphome {
     }
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      auto m = CoreMutex(lock);
+      auto m = new CoreMutex(lock);
       while (!m);
       ximg[y * 64 + x] = c.raw_32;
     }
