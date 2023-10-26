@@ -12,6 +12,8 @@ namespace esphome {
       this->writer_ = writer;
     }
 
+    mutex_t lock;
+
     uint32_t ximg[64*64];
     void core1_redraw() {
       int h = 64 / 2;
@@ -23,12 +25,17 @@ namespace esphome {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
+	    auto m = CoreMutex(lock);
+	    while (!m);
+
 	    digitalWrite(I75_R0, (ximg[i0] & 0x0000FF) > 0);
 	    digitalWrite(I75_G0, (ximg[i0] & 0x00FF00) > 0);
 	    digitalWrite(I75_B0, (ximg[i0] & 0xFF0000) > 0);
 	    digitalWrite(I75_R1, (ximg[i1] & 0x0000FF) > 0);
 	    digitalWrite(I75_G1, (ximg[i1] & 0x00FF00) > 0);
 	    digitalWrite(I75_B1, (ximg[i1] & 0xFF0000) > 0);
+
+	    delete m;
 
 	    digitalWrite(I75_CLK, HIGH);
 	    digitalWrite(I75_CLK, LOW);
@@ -85,6 +92,8 @@ namespace esphome {
     }
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
+      auto m = CoreMutex(lock);
+      while (!m);
       ximg[y * 64 + x] = c.raw_32;
     }
 
