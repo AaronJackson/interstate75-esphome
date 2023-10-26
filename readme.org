@@ -1,6 +1,6 @@
 * ESPHome on the Interstate75 RGB Matrix Display
 
-Seems to work! Tad flickery.
+Seems to work! Tad flickery. Uses both cores of the Pico to prevent ESPHome from interfering with the bitbanging loop. Tried to use PIO but got confused.
 
 #+BEGIN_SRC yaml
 external_components:
@@ -16,7 +16,7 @@ font:
 display:
   - platform: hub75display
     id: mydisplay
-    update_interval: 0ms
+    update_interval: 1s
     lambda: |-
       Color red = Color(255, 0, 0);
       Color green = Color(0, 255, 0);
