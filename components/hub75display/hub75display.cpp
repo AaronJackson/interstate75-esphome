@@ -92,9 +92,9 @@ namespace esphome {
 
     }
 
-    uint32_t c1owner;
+    uint32_t c0owner;
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      if (!mutex_try_enter(&lock, &owner))
+      if (!mutex_try_enter(&lock, &c0owner))
 	mutex_enter_blocking(&lock);
       ximg[y * 64 + x] = c.raw_32;
       mutex_exit(&lock);
