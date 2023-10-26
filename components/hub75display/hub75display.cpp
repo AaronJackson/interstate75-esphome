@@ -34,12 +34,12 @@ namespace esphome {
 
 	    if (!mutex_try_enter(&lock, &owner))
 	      mutex_enter_blocking(&lock);
-	    digitalWrite(I75_R0, (acive_img[i0] & 0x0000FF) > 0);
-	    digitalWrite(I75_G0, (acive_img[i0] & 0x00FF00) > 0);
-	    digitalWrite(I75_B0, (acive_img[i0] & 0xFF0000) > 0);
-	    digitalWrite(I75_R1, (acive_img[i1] & 0x0000FF) > 0);
-	    digitalWrite(I75_G1, (acive_img[i1] & 0x00FF00) > 0);
-	    digitalWrite(I75_B1, (acive_img[i1] & 0xFF0000) > 0);
+	    digitalWrite(I75_R0, (&acive_img[i0] & 0x0000FF) > 0);
+	    digitalWrite(I75_G0, (&acive_img[i0] & 0x00FF00) > 0);
+	    digitalWrite(I75_B0, (&acive_img[i0] & 0xFF0000) > 0);
+	    digitalWrite(I75_R1, (&acive_img[i1] & 0x0000FF) > 0);
+	    digitalWrite(I75_G1, (&acive_img[i1] & 0x00FF00) > 0);
+	    digitalWrite(I75_B1, (&acive_img[i1] & 0xFF0000) > 0);
 	    mutex_exit(&lock);
 
 	    digitalWrite(I75_CLK, HIGH);
@@ -107,7 +107,7 @@ namespace esphome {
 
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      nonactive_img[y * 64 + x] = c.raw_32;
+      &nonactive_img[y * 64 + x] = c.raw_32;
     }
 
     int HUB75Display::get_height_internal() {
