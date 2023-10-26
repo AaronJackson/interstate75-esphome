@@ -14,8 +14,8 @@ namespace esphome {
 
     uint32_t img[64*64];
     void core1_redraw() {
-      int h = this->get_height_internal() / 2;
-      int w = this->get_width_internal();
+      int h = 64 / 2;
+      int w = 64;
 
       while (1) {
 	for (int row = 0; row < h; row++) {
