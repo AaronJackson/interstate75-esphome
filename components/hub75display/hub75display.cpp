@@ -23,20 +23,22 @@ namespace esphome {
       int w = 64;
 
       while (1) {
+	if (!mutex_try_enter(&lock, &owner))
+	  mutex_enter_blocking(&lock);
+
 	for (int row = 0; row < h; row++) {
 	  for (int col = 0; col < w; col++) {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
-	    if (!mutex_try_enter(&lock, &owner))
-	      mutex_enter_blocking(&lock);
+
 	    digitalWrite(I75_R0, (ximg[i0] & 0x0000FF) > 0);
 	    digitalWrite(I75_G0, (ximg[i0] & 0x00FF00) > 0);
 	    digitalWrite(I75_B0, (ximg[i0] & 0xFF0000) > 0);
 	    digitalWrite(I75_R1, (ximg[i1] & 0x0000FF) > 0);
 	    digitalWrite(I75_G1, (ximg[i1] & 0x00FF00) > 0);
 	    digitalWrite(I75_B1, (ximg[i1] & 0xFF0000) > 0);
-	    mutex_exit(&lock);
+
 
 	    digitalWrite(I75_CLK, HIGH);
 	    digitalWrite(I75_CLK, LOW);
@@ -55,6 +57,8 @@ namespace esphome {
 
 	  digitalWrite(I75_OE, LOW);
 	}
+
+	mutex_exit(&lock);
       }
 
     }
