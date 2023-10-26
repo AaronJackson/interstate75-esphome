@@ -77,6 +77,7 @@ namespace esphome {
       digitalWrite(I75_OE, LOW);
       digitalWrite(I75_STB, LOW);
 
+      mutex_init(&lock);
       multicore_launch_core1(core1_redraw);
     }
 
