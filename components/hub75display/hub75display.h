@@ -40,8 +40,6 @@ namespace esphome {
     protected:
       optional<hub75display_writer_t>  writer_{};
 
-      uint32_t img[64*64];
-
       void draw_absolute_pixel_internal(int x, int y, Color color) override;
       int get_height_internal() override;
       int get_width_internal() override;
