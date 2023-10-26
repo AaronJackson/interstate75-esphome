@@ -57,7 +57,7 @@ namespace esphome {
 	}
       }
 
-      delayMicroseconds(5);
+      delayMicroseconds(100);
     }
 
     void HUB75Display::setup() {
