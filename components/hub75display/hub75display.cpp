@@ -56,6 +56,8 @@ namespace esphome {
 	  digitalWrite(I75_OE, LOW);
 	}
       }
+
+      delayMicroseconds(5);
     }
 
     void HUB75Display::setup() {
