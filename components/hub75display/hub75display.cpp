@@ -12,6 +12,7 @@ namespace esphome {
       this->writer_ = writer;
     }
 
+    uint32_t img[64*64];
     void core1_redraw() {
       int h = this->get_height_internal() / 2;
       int w = this->get_width_internal();
@@ -22,12 +23,12 @@ namespace esphome {
 	    int i0 = row * 64 + col;
 	    int i1 = (row + 32) * 64 + col;
 
-	    digitalWrite(I75_R0, (this->img[i0] & 0x0000FF) > 0);
-	    digitalWrite(I75_G0, (this->img[i0] & 0x00FF00) > 0);
-	    digitalWrite(I75_B0, (this->img[i0] & 0xFF0000) > 0);
-	    digitalWrite(I75_R1, (this->img[i1] & 0x0000FF) > 0);
-	    digitalWrite(I75_G1, (this->img[i1] & 0x00FF00) > 0);
-	    digitalWrite(I75_B1, (this->img[i1] & 0xFF0000) > 0);
+	    digitalWrite(I75_R0, (img[i0] & 0x0000FF) > 0);
+	    digitalWrite(I75_G0, (img[i0] & 0x00FF00) > 0);
+	    digitalWrite(I75_B0, (img[i0] & 0xFF0000) > 0);
+	    digitalWrite(I75_R1, (img[i1] & 0x0000FF) > 0);
+	    digitalWrite(I75_G1, (img[i1] & 0x00FF00) > 0);
+	    digitalWrite(I75_B1, (img[i1] & 0xFF0000) > 0);
 
 	    digitalWrite(I75_CLK, HIGH);
 	    digitalWrite(I75_CLK, LOW);
@@ -84,7 +85,7 @@ namespace esphome {
     }
 
     void HUB75Display::draw_absolute_pixel_internal(int x, int y, Color c) {
-      this->img[y * 64 + x] = c.raw_32;
+      img[y * 64 + x] = c.raw_32;
     }
 
     int HUB75Display::get_height_internal() {
