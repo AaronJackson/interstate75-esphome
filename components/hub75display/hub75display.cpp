@@ -34,12 +34,12 @@ namespace esphome {
 
 	    if (!mutex_try_enter(&lock, &owner))
 	      mutex_enter_blocking(&lock);
-	    digitalWrite(I75_R0, (&acive_img[i0] & 0x0000FF) > 0);
-	    digitalWrite(I75_G0, (&acive_img[i0] & 0x00FF00) > 0);
-	    digitalWrite(I75_B0, (&acive_img[i0] & 0xFF0000) > 0);
-	    digitalWrite(I75_R1, (&acive_img[i1] & 0x0000FF) > 0);
-	    digitalWrite(I75_G1, (&acive_img[i1] & 0x00FF00) > 0);
-	    digitalWrite(I75_B1, (&acive_img[i1] & 0xFF0000) > 0);
+	    digitalWrite(I75_R0, (&active_img[i0] & 0x0000FF) > 0);
+	    digitalWrite(I75_G0, (&active_img[i0] & 0x00FF00) > 0);
+	    digitalWrite(I75_B0, (&active_img[i0] & 0xFF0000) > 0);
+	    digitalWrite(I75_R1, (&active_img[i1] & 0x0000FF) > 0);
+	    digitalWrite(I75_G1, (&active_img[i1] & 0x00FF00) > 0);
+	    digitalWrite(I75_B1, (&active_img[i1] & 0xFF0000) > 0);
 	    mutex_exit(&lock);
 
 	    digitalWrite(I75_CLK, HIGH);
